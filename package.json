@@ -1,0 +1,23 @@
+{
+  "name": "lab24",
+  "version": "1.0.0",
+  "description": "",
+  "main": "24_01.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon 24_01.js"
+  },
+  "author": "tehaonvanton <tehaonvanton@gmail>",
+  "license": "ISC",
+  "dependencies": {
+    "ejs": "^3.1.7",
+    "express": "^4.17.3",
+    "express-session": "^1.17.2",
+    "nodemon": "^2.0.15",
+    "passport": "^0.5.2",
+    "passport-local": "^1.0.0",
+    "sequelize": "^6.19.0",
+    "sequelize-cli": "^6.4.1",
+    "tedious": "^14.4.0"
+  }
+}
