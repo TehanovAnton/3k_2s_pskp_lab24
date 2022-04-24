@@ -1,9 +1,9 @@
 {
   "development": {
-    "username": "Anton",
+    "username": "postgres",
     "password": "ewqqwe",
-    "database": "pskp",
+    "database": "pskp_lab24",
     "host": "127.0.0.1",
-    "dialect": "mssql"
+    "dialect": "postgres"
   }
 }

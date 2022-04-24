@@ -3,8 +3,8 @@ const DataTypes = require('sequelize').DataTypes;
 const { DB_NAME, USER_NAME, USER_PASSWORD } = require('./database');
 
 const sequelize = new Sequelize(
-    'pskp', 'Anton', 'ewqqwe',
-    { dialect:'mssql', pool: { max:5, min:0, acquire:30000, idle:10000 } }
+    'pskp_lab24', 'postgres', 'ewqqwe',
+    { dialect:'postgres', pool: { max:5, min:0, acquire:30000, idle:10000 } }
 );
 
 const User = require('./models/user')(sequelize, DataTypes )
