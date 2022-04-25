@@ -8,6 +8,7 @@ const passport = require('./24_01_passport_config');
 const auth_router = require('./auth_router')
 const users_router = require('./users_router')
 const repos_router = require('./repos_router')
+const commits_router = require('./commits_router')
 
 const port = 3000;
 
@@ -27,6 +28,7 @@ app.use(passport.authenticate('session'));
 app.use(auth_router)
 app.use(users_router)
 app.use(repos_router)
+app.use(commits_router)
 
 app.use(function(req, res, next) {
   res.status(404)

@@ -12,6 +12,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       Repos.belongsTo(models['user'], { as:'author', foreignKey:'authorId' })
+      Repos.hasMany(models['commit'], { as:'commits', foreignKey:'reposId' })
     }
   }
 
@@ -24,7 +25,9 @@ module.exports = (sequelize, DataTypes) => {
   });
 
   const User = require('../models/user')(sequelize, DataTypes)
-  Repos.associate({ 'user':User })  
+  const Commit = require('../models/commit')(sequelize, DataTypes)
+
+  Repos.associate({ 'user':User, 'commit':Commit })
 
   return Repos;
 };

@@ -3,7 +3,7 @@ const DataTypes = require('sequelize').DataTypes;
 const { DB_NAME, USER_NAME, USER_PASSWORD } = require('./database');
 
 const { subject } = require('@casl/ability')
-const { registeredRoleAbilities } = require('./registeredRoleAbilities')
+const { registeredRoleAbilities } = require('./registeredRoleAbilities');
 
 const sequelize = new Sequelize(
     'pskp_lab24', 'postgres', 'ewqqwe',
@@ -12,12 +12,27 @@ const sequelize = new Sequelize(
 
 const User = require('./models/user')(sequelize, DataTypes )
 const Repos = require('./models/repos')(sequelize, DataTypes)
+const Commit = require('./models/commit')(sequelize, DataTypes)
 
-Repos.findOne({ include:'author' })
-.then(repos => {    
-console.log(repos.author);
+Commit.associate({ 'repos':Repos })
+
+Commit.update({ message: 'new' }, { where:{ id: 2 } })
+.then(updated => {
+    console.log(updated);
 })
-.catch(err => console.log(err))
+
+// Commit.findOne({ include:'repos' })
+// .then(commit => {    
+//     console.log(JSON.stringify(commit.repos));
+// })
+// .catch(err => console.log(err))
+
+
+// Repos.findOne({ include:'commits' })
+// .then(repos => {    
+// console.log(JSON.stringify(repos.commits));
+// })
+// .catch(err => console.log(err))
 
 // User.associate({ 'repos':Repos })    
 
