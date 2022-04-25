@@ -21,9 +21,28 @@ router.get('/reposes/:id',
 
 router.post('/reposes',
   async (req, res) => {
-    console.log(req.body);
     let repos = await Repos.create({ name:req.body.name, authorId:req.body.authorId })
     res.json(repos)
+  }
+)
+
+router.put('/reposes/:id',
+  async (req, res) => {
+    await Repos.update(req.body, { where: { id:req.params.id } })
+    let repos = await Repos.findByPk(req.params.id)
+    res.json(repos)
+  }
+)
+
+router.delete('/reposes/:id',
+  async (req, res) => { 
+    let repos = await Repos.findByPk(req.params.id)
+    let isDeleted = await Repos.destroy({ where: { id:req.params.id } })
+
+    if (!!isDeleted)
+      res.json(repos)
+    else
+      res.send('something went wrong')
   }
 )
 
