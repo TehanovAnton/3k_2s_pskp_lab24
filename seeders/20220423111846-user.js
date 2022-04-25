@@ -6,7 +6,7 @@ module.exports = {
       name: 'anton',
       email: 'tehanovanton@gmail.com',
       password: 'ewqqwe',
-      role: 'guest',
+      role: 'registered',
       createdAt: new Date(),
       updatedAt: new Date()
     }]);
