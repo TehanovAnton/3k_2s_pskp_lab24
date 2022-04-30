@@ -2,8 +2,7 @@ const Sequelize = require('sequelize');
 const DataTypes = require('sequelize').DataTypes;
 const { DB_NAME, USER_NAME, USER_PASSWORD } = require('./database');
 
-const { subject } = require('@casl/ability')
-const { registeredRoleAbilities } = require('./registeredRoleAbilities');
+const { abilities, subject } = require('./abilities/abilities');
 
 const sequelize = new Sequelize(
     'pskp_lab24', 'postgres', 'ewqqwe',
@@ -14,12 +13,17 @@ const User = require('./models/user')(sequelize, DataTypes )
 const Repos = require('./models/repos')(sequelize, DataTypes)
 const Commit = require('./models/commit')(sequelize, DataTypes)
 
+Repos.associate({ 'user':User, 'commit':Commit })
 Commit.associate({ 'repos':Repos })
 
-Commit.update({ message: 'new' }, { where:{ id: 2 } })
-.then(updated => {
-    console.log(updated);
+Commit.findOne({ include:'repos' }). 
+then(async (commit) => {
 })
+
+// Commit.update({ message: 'new' }, { where:{ id: 2 } })
+// .then(updated => {
+//     console.log(updated);
+// })
 
 // Commit.findOne({ include:'repos' })
 // .then(commit => {    
@@ -30,17 +34,17 @@ Commit.update({ message: 'new' }, { where:{ id: 2 } })
 
 // Repos.findOne({ include:'commits' })
 // .then(repos => {    
-// console.log(JSON.stringify(repos.commits));
+//     console.log(repos instanceof Repos);
 // })
 // .catch(err => console.log(err))
 
-// User.associate({ 'repos':Repos })    
+User.associate({ 'repos':Repos })    
 
-// User.findOne({ include:'reposes' })
-// .then(repos => {     
-//     console.log(repos);
-// })
-// .catch(err => console.log(err))
+User.findOne({ include:'reposes' })
+.then(user => {     
+    console.log(user.reposes.map(repos => repos.id));
+})
+.catch(err => console.log(err))
 
 
 

@@ -24,10 +24,5 @@ module.exports = (sequelize, DataTypes) => {
     modelName: 'Repos',
   });
 
-  const User = require('../models/user')(sequelize, DataTypes)
-  const Commit = require('../models/commit')(sequelize, DataTypes)
-
-  Repos.associate({ 'user':User, 'commit':Commit })
-
   return Repos;
 };

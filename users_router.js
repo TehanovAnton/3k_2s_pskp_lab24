@@ -5,7 +5,7 @@ const bodyParser = require('body-parser').urlencoded({ extended: false })
 const {
   registeredRoleAbilities,
   subject
-} = require('./registeredRoleAbilities')
+} = require('./abilities/registeredRoleAbilities')
 
 const { sequelize , DataTypes } = require('./sequelize')
 const User = require('./models/user')(sequelize, DataTypes)
@@ -29,6 +29,7 @@ router.get('/users/:id',
 )
 
 router.get('/users',
+  canReadUsers,
   async function (req, res, next) {
     res.json(await User.findAll({ raw:true }))
   }

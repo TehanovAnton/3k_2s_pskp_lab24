@@ -1,5 +1,7 @@
 'use strict';
 
+const _ = require('underscore')
+
 module.exports = {
   async up (queryInterface, Sequelize) {
 
@@ -9,14 +11,15 @@ module.exports = {
     } = require('../sequelize')
     const User = require('../models/user')(sequelize, DataTypes)
 
-    let user = await User.findOne({ raw:true })
-
-    queryInterface.bulkInsert('Repos', [{
-      name: 'my_repos',
-      authorId: user.id,
-      createdAt: new Date(),
-      updatedAt: new Date()
-    }]);
+    let users = await User.findAll({ raw:true })
+    users.forEach(user => {
+      queryInterface.bulkInsert('Repos', [{
+        name: `${user.name}_repos`,
+        authorId: user.id,
+        createdAt: new Date(),
+        updatedAt: new Date()
+      }]);
+    })
   },
 
   async down (queryInterface, Sequelize) {

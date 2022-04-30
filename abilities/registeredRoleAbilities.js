@@ -1,7 +1,7 @@
 const { AbilityBuilder, Ability, subject } = require('@casl/ability')
 
-const { sequelize , DataTypes } = require('./sequelize')
-const User = require('./models/user')(sequelize, DataTypes)
+const { sequelize , DataTypes } = require('../sequelize')
+const User = require('../models/user')(sequelize, DataTypes)
 
 function registeredRoleAbilities(registeredUser) {
   const { can, cannot, rules } = new AbilityBuilder(Ability);
