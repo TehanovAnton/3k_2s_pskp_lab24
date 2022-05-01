@@ -1,21 +1,47 @@
+const roles = require('./roles')
+const { subject } = require('@casl/ability')
+const { sequelize, DataTypes } = require('../sequelize')
+const { AbilityBuilder, Ability } = require('@casl/ability');
 
-let abilities = async (user, repos) => {
+const User = require('../models/user')(sequelize, DataTypes)
+const Repos = require('../models/repos')(sequelize, DataTypes)
 
-  const { AbilityBuilder, Ability, subject } = require('@casl/ability');
+
+async function reposAuthorise(req, res, next, abilityName) {    
+  let user = await User.findOne({ where:{ id:req.user.id }, include:'reposes' })
+  let ability = await abilities(user)
+  let repos = subject('Repos', { authorId: user.id })
+
+  if (req.params['id']) {
+    repos = await Repos.findOne({ where:{ id: req.params.id } })
+  }
+
+  console.log(JSON.stringify(ability));
+  console.log(JSON.stringify(repos));
+  console.log(abilityName);
+
+  if (ability.can(abilityName, repos)) {
+    return next()
+  }
+  else {
+    res.send('permission denied')
+  }
+}
+
+let abilities = async (user) => {  
   const { can, rules } = new AbilityBuilder(Ability);
   
-  if (user.role == GUEST) {
-    can('read_repos', 'Repos', { id:repos.id, authorId: user.id })
+  if (user.role == roles.GUEST) {
+    can('read', 'Repos', { authorId: user.id } )
   }
-  else if (user.role == REGISTERED) {
-    can('read_repos', 'Repos', { id:repos.id, authorId: user.id })
-    can('manage_repos', 'Repos', { id:repos.id, authorId: user.id })  
+  else if (user.role == roles.REGISTERED) {
+    can('manage', 'Repos', { authorId: user.id })  
   }
-  else if (user.role == ADMIN) {
-    
+  else if (user.role == roles.ADMIN) {
+    can('manage', 'Repos')  
   }
 
   return new Ability(rules)
 }
 
-module.exports = abilities
+module.exports = { abilities, reposAuthorise, subject }
