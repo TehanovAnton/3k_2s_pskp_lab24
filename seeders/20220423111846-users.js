@@ -17,7 +17,16 @@ module.exports = {
       name: 'andrew',
       email: 'tehanovandrew@gmail.com',
       password: 'ewqqwe',
-      role: 'guest',
+      role: GUEST,
+      createdAt: new Date(),
+      updatedAt: new Date()
+    }]);
+
+    queryInterface.bulkInsert('Users', [{
+      name: 'admin',
+      email: 'tehanovadmin@gmail.com',
+      password: 'ewqqwe',
+      role: ADMIN,
       createdAt: new Date(),
       updatedAt: new Date()
     }]);

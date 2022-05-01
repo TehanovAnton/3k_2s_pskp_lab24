@@ -10,7 +10,7 @@ User.associate({ 'repos':Repos })
 Repos.associate({ 'user':User, 'commit':Commit })
 
 
-async function commitAuthorise(req, res, next) {    
+async function commitAuthorise(req, res, next, abilityName) {    
   let user = await User.findOne({ where:{ id:req.user.id }, include:'reposes' })
   let ability = await abilities(user)
   let commit = subject('Commit', { reposId: parseInt(req.params.reposId) })
@@ -19,7 +19,11 @@ async function commitAuthorise(req, res, next) {
     commit = await Commit.findOne({ where:{ id: req.params.id } })
   }
 
-  if (ability.can('read_commits', commit)) {
+  console.log(JSON.stringify(ability));
+  console.log(JSON.stringify(commit));
+  console.log(abilityName);
+
+  if (ability.can(abilityName, commit)) {
     return next()
   }
   else {
@@ -29,18 +33,17 @@ async function commitAuthorise(req, res, next) {
 
 let abilities = async (user) => {
 
-  const { AbilityBuilder, Ability, subject } = require('@casl/ability');
+  const { AbilityBuilder, Ability } = require('@casl/ability');
   const { can, rules } = new AbilityBuilder(Ability);
   
   if (user.role == roles.GUEST) {
-    can('read_commit', 'Commit', { reposId: { $in: user.reposes.map(repos => repos.id) } })
+    can('read', 'Commit', { reposId: { $in: user.reposes.map(repos => repos.id) } })
   }
   else if (user.role == roles.REGISTERED) {
-    console.log(' blat');
     can('manage', 'Commit', { reposId: { $in: user.reposes.map(repos => repos.id) } })  
   }
   else if (user.role == roles.ADMIN) {
-    
+    can('manage', 'Commit')  
   }
 
   return new Ability(rules)

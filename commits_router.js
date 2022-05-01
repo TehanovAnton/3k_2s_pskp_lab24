@@ -17,7 +17,7 @@ router.get('/commits',
 )
 
 router.get('/reposes/:reposId/commits',
-  commitAuthorise,
+  (req, res, next) => commitAuthorise(req, res, next, 'read'),
 
   async (req, res) => {
     let reposOptions = { where: { id:parseInt(req.params.reposId) }, include:'commits' }
@@ -28,7 +28,7 @@ router.get('/reposes/:reposId/commits',
 )
 
 router.get('/reposes/:reposId/commits/:id',
-  commitAuthorise,
+  (req, res, next) => commitAuthorise(req, res, next, 'read'),
 
   async (req, res) => {
     let commit = await Commit.findByPk(req.params.id)
@@ -37,7 +37,7 @@ router.get('/reposes/:reposId/commits/:id',
 )
 
 router.post('/reposes/:reposId/commits',
-  commitAuthorise,
+  (req, res, next) => commitAuthorise(req, res, next, 'create'),
 
   async (req, res) => {
     let params = req.params
@@ -48,7 +48,7 @@ router.post('/reposes/:reposId/commits',
 )
 
 router.put('/reposes/:reposId/commits/:id',
-  commitAuthorise,
+  (req, res, next) => commitAuthorise(req, res, next, 'update'),
 
   async (req, res) => {
     await Commit.update(req.body, { where:{ id: req.params.id } })
@@ -59,7 +59,7 @@ router.put('/reposes/:reposId/commits/:id',
 )
 
 router.delete('/reposes/:reposId/commits/:id',
-  commitAuthorise,
+  (req, res, next) => commitAuthorise(req, res, next, 'delete'),
   
   async (req, res) => { 
     let repos = await Commit.findByPk(req.params.id)
