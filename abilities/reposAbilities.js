@@ -1,14 +1,10 @@
 const roles = require('./roles')
 const { subject } = require('@casl/ability')
-const { sequelize, DataTypes } = require('../sequelize')
 const { AbilityBuilder, Ability } = require('@casl/ability');
-
-const User = require('../models/user')(sequelize, DataTypes)
-const Repos = require('../models/repos')(sequelize, DataTypes)
-
+const { User, Repos } = require('../models/associate')
 
 async function reposAuthorise(req, res, next, abilityName) {    
-  let user = await User.findOne({ where:{ id:req.user.id }, include:'reposes' })
+  let user = await User.findOne({ where:{ id:req.user.id } })
   let ability = await abilities(user)
   let repos = subject('Repos', { authorId: user.id })
 

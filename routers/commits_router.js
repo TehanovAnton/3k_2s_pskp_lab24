@@ -1,13 +1,10 @@
 const router =  require('express').Router()
+const { isAuthenticated } = require('../24_01_passport_config')
 
-const { sequelize, DataTypes } = require('./sequelize')
-const { commitAuthorise } = require('./abilities/commitAbilities')
+const { sequelize, DataTypes } = require('../sequelize')
+const { commitAuthorise } = require('../abilities/commitAbilities')
 
-const User = require('./models/user')(sequelize, DataTypes)
-const Repos = require('./models/repos')(sequelize, DataTypes)
-const Commit = require('./models/commit')(sequelize, DataTypes)
-
-Repos.associate({ 'user':User, 'commit':Commit })
+const { User, Repos, Commit } = require('../models/associate')
 
 
 router.get('/commits',
@@ -17,6 +14,7 @@ router.get('/commits',
 )
 
 router.get('/reposes/:reposId/commits',
+  isAuthenticated,
   (req, res, next) => commitAuthorise(req, res, next, 'read'),
 
   async (req, res) => {
@@ -28,6 +26,7 @@ router.get('/reposes/:reposId/commits',
 )
 
 router.get('/reposes/:reposId/commits/:id',
+  isAuthenticated,
   (req, res, next) => commitAuthorise(req, res, next, 'read'),
 
   async (req, res) => {
@@ -37,6 +36,7 @@ router.get('/reposes/:reposId/commits/:id',
 )
 
 router.post('/reposes/:reposId/commits',
+  isAuthenticated,
   (req, res, next) => commitAuthorise(req, res, next, 'create'),
 
   async (req, res) => {
@@ -48,6 +48,7 @@ router.post('/reposes/:reposId/commits',
 )
 
 router.put('/reposes/:reposId/commits/:id',
+  isAuthenticated,
   (req, res, next) => commitAuthorise(req, res, next, 'update'),
 
   async (req, res) => {
@@ -59,6 +60,7 @@ router.put('/reposes/:reposId/commits/:id',
 )
 
 router.delete('/reposes/:reposId/commits/:id',
+  isAuthenticated,
   (req, res, next) => commitAuthorise(req, res, next, 'delete'),
   
   async (req, res) => { 
@@ -71,7 +73,5 @@ router.delete('/reposes/:reposId/commits/:id',
       res.send('something went wrong')
   }
 )
-
-
 
 module.exports = router

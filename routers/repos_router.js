@@ -1,9 +1,9 @@
 const router =  require('express').Router()
+const { isAuthenticated } = require('../24_01_passport_config')
 
-const { sequelize, DataTypes } = require('./sequelize')
-const { reposAuthorise } = require('./abilities/reposAbilities')
+const { reposAuthorise } = require('../abilities/reposAbilities')
 
-const Repos = require('./models/repos')(sequelize, DataTypes)
+const { User, Repos } = require('../models/associate')
 
 router.get('/reposes',
   async function (req, res, next) {
@@ -12,6 +12,7 @@ router.get('/reposes',
 )
 
 router.get('/reposes/:id',
+  isAuthenticated,
   (req, res, next) => reposAuthorise(req, res, next, 'read'),
 
   async (req, res) => {
@@ -21,6 +22,7 @@ router.get('/reposes/:id',
 )
 
 router.post('/reposes',
+  isAuthenticated,
   (req, res, next) => reposAuthorise(req, res, next, 'create'),
 
   async (req, res) => {
@@ -30,6 +32,7 @@ router.post('/reposes',
 )
 
 router.put('/reposes/:id',
+  isAuthenticated,
   (req, res, next) => reposAuthorise(req, res, next, 'update'),
 
   async (req, res) => {
@@ -40,6 +43,7 @@ router.put('/reposes/:id',
 )
 
 router.delete('/reposes/:id',
+  isAuthenticated,
   (req, res, next) => reposAuthorise(req, res, next, 'delete'),
 
   async (req, res) => { 

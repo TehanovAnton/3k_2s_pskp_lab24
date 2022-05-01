@@ -9,7 +9,7 @@ module.exports = {
       sequelize,
       DataTypes
     } = require('../sequelize')
-    const User = require('../models/user')(sequelize, DataTypes)
+    const { User } = require('../models/associate')
 
     let users = await User.findAll({ raw:true })
     users.forEach(user => {

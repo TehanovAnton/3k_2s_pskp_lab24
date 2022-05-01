@@ -1,4 +1,4 @@
-const passport = require('./24_01_passport_config')
+const { passport, isAuthenticated } = require('../24_01_passport_config')
 const router =  require('express').Router()
 
 const bodyParser = require('body-parser').urlencoded({ extended: false })
@@ -15,8 +15,10 @@ router.post('/login', bodyParser, passport.authenticate('local', { session:true 
   }
 )
 
-router.get('/logout', passport.authenticate('local', { session:true }),
-  function(req, res, next) {
+router.get('/logout',
+  isAuthenticated,
+  
+  function(req, res) {
     req.logout();
     res.send(`loged out:${!req.isAuthenticated()}`);
   }

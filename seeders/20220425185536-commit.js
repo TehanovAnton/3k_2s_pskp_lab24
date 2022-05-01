@@ -2,12 +2,7 @@
 
 module.exports = {
   async up (queryInterface, Sequelize) {
-
-    const {
-      sequelize,
-      DataTypes
-    } = require('../sequelize')
-    const Repos = require('../models/repos')(sequelize, DataTypes)
+    const { Repos } = require('../models/associate')
 
     let reposes = await Repos.findAll({ raw:true })
 
